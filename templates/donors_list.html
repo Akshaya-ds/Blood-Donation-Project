@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registered Donors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f9;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background: linear-gradient(to right, #d62828, #f77f00);
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        /* FILTER SECTION */
+
+        .filter-container {
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .filter-form {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            color: #d62828;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .filter-group label::after {
+            content: "";
+            width: 30px;
+            height: 3px;
+            background: #d62828;
+            display: block;
+            margin-top: 4px;
+            border-radius: 2px;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            min-width: 160px;
+            font-size: 14px;
+        }
+
+        .approved-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d62828;
+            font-weight: 700;
+        }
+
+        .search-btn {
+            padding: 10px 22px;
+            background: #d62828;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        /* TABLE SECTION */
+
+        .table-container {
+            width: 95%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #d62828;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* EMPTY MESSAGE */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #555;
+            background: white;
+            width: 60%;
+            margin: 30px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            display: block;
+            width: 220px;
+            margin: 30px auto;
+            padding: 12px;
+            text-align: center;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Registered Donors</h2>
+
+<div class="filter-container">
+    <form method="GET" action="/donors_list" class="filter-form">
+
+        <div class="filter-group">
+            <label>Blood Group</label>
+            <select name="blood">
+                <option value="">All Blood Groups</option>
+                <option value="A+" {% if selected_blood == "A+" %}selected{% endif %}>A+</option>
+                <option value="A-" {% if selected_blood == "A-" %}selected{% endif %}>A-</option>
+                <option value="B+" {% if selected_blood == "B+" %}selected{% endif %}>B+</option>
+                <option value="B-" {% if selected_blood == "B-" %}selected{% endif %}>B-</option>
+                <option value="O+" {% if selected_blood == "O+" %}selected{% endif %}>O+</option>
+                <option value="O-" {% if selected_blood == "O-" %}selected{% endif %}>O-</option>
+                <option value="AB+" {% if selected_blood == "AB+" %}selected{% endif %}>AB+</option>
+                <option value="AB-" {% if selected_blood == "AB-" %}selected{% endif %}>AB-</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="approved-label">
+                <input type="checkbox" name="approved" value="yes"
+                    {% if approved_checked == "yes" %}checked{% endif %}>
+                Approved Only
+            </label>
+        </div>
+
+        <button type="submit" class="search-btn">Search</button>
+
+    </form>
+</div>
+
+<div class="table-container">
+
+{% if donors %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Blood</th>
+        <th>Phone</th>
+        <th>Location</th>
+        <th>Last Donation</th>
+        <th>Status</th>
+    </tr>
+
+    {% for donor in donors %}
+    <tr>
+        <td>{{ donor['name'] }}</td>
+        <td>{{ donor['age'] }}</td>
+        <td>{{ donor['blood'] }}</td>
+        <td>{{ donor['phone'] }}</td>
+        <td>{{ donor['location'] }}</td>
+        <td>{{ donor['last_date'] }}</td>
+        <td>
+            {% if donor['status'] == 'approved' %}
+                <span class="approved">Approved</span>
+            {% else %}
+                <span class="rejected">Rejected</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+
+<div class="empty">
+    {% if selected_blood %}
+        No {{ selected_blood }} blood group donors available at the moment.
+    {% else %}
+        No donors available at the moment.
+    {% endif %}
+</div>
+
+{% endif %}
+
+</div>
+
+<a href="{{ url_for('donor') }}" class="back-btn">
+    Back to Registration
+</a>
+
+</body>
+</html>
+
+
+
+
+

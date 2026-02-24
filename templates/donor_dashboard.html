@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Donor Registration</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    width:480px;
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1{
+    font-size:22px;
+    margin-bottom:5px;
+    color:#222;
+}
+
+.subtitle{
+    font-size:14px;
+    color:#777;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-size:14px;
+    font-weight:600;
+    color:#444;
+}
+
+input, select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:14px;
+    background:#f9fafb;
+    outline:none;
+    transition:0.3s;
+}
+
+input:focus, select:focus{
+    border-color:#e53935;
+    background:white;
+    box-shadow:0 0 5px rgba(229,57,53,0.2);
+}
+
+/* Toggle Switch */
+.toggle-container{
+    margin-top:20px;
+    background:#f4f6f9;
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.toggle-label{
+    font-size:14px;
+    color:#444;
+}
+
+.switch{
+    position:relative;
+    display:inline-block;
+    width:45px;
+    height:24px;
+}
+
+.switch input{
+    opacity:0;
+    width:0;
+    height:0;
+}
+
+.slider{
+    position:absolute;
+    cursor:pointer;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#ccc;
+    transition:.4s;
+    border-radius:34px;
+}
+
+.slider:before{
+    position:absolute;
+    content:"";
+    height:18px;
+    width:18px;
+    left:3px;
+    bottom:3px;
+    background:white;
+    transition:.4s;
+    border-radius:50%;
+}
+
+.switch input:checked + .slider{
+    background-color:#e53935;
+}
+
+.switch input:checked + .slider:before{
+    transform:translateX(21px);
+}
+
+button{
+    margin-top:25px;
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#e53935;
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#c62828;
+}
+
+.view-btn{
+    margin-top:10px;
+    background:#444;
+}
+
+.view-btn:hover{
+    background:#222;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>❤️ Donor Registration</h1>
+<p class="subtitle">Register to become a blood donor and help save lives.</p>
+
+<form action="/register_donor" method="POST">
+
+<label>Full Name *</label>
+<input type="text" name="name" placeholder="Enter your full name" required>
+
+<label>Age *</label>
+<input type="number" name="age" placeholder="Enter your age" required>
+
+<label>Blood Group *</label>
+<select name="blood" required>
+<option value="">Select your blood group</option>
+<option>A+</option><option>A-</option>
+<option>B+</option><option>B-</option>
+<option>O+</option><option>O-</option>
+<option>AB+</option><option>AB-</option>
+</select>
+
+<label>Phone Number *</label>
+<input type="text" name="phone" placeholder="Enter phone number" required>
+
+<label>Location *</label>
+<input type="text" name="location" placeholder="Enter your area" required>
+
+<label>Last Donation Date *</label>
+<input type="date" name="last_date" required>
+
+<div class="toggle-container">
+    <div class="toggle-label">
+        Available for Donation
+    </div>
+    <label class="switch">
+        <input type="checkbox" name="available" checked>
+        <span class="slider"></span>
+    </label>
+</div>
+
+<button type="submit">Register as Donor</button>
+
+</form>
+
+<a href="/donors_list">
+<button class="view-btn">View Registered Donors</button>
+</a>
+
+</div>
+
+</body>
+</html>

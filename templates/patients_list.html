@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Registered Patients</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:#fff5f4;
+padding:50px;
+}
+
+h1{
+text-align:center;
+color:#e53935;
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+th{
+background:#e53935;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+tr:hover{
+background:#fdecea;
+}
+
+.critical{
+color:#b71c1c;
+font-weight:bold;
+}
+
+.empty{
+text-align:center;
+color:#b71c1c;
+font-size:18px;
+margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Registered Patients</h1>
+
+{% if patients %}
+
+<table>
+<tr>
+<th>Name</th>
+<th>Age</th>
+<th>Blood</th>
+<th>Phone</th>
+<th>Location</th>
+<th>Units</th>
+<th>Urgency</th>
+</tr>
+
+{% for p in patients %}
+<tr>
+<td>{{ p['name'] }}</td>
+<td>{{ p['age'] }}</td>
+<td>{{ p['blood'] }}</td>
+<td>{{ p['phone'] }}</td>
+<td>{{ p['location'] }}</td>
+<td>{{ p['units_required'] }}</td>
+<td class="{% if p['urgency'] == 'Critical' %}critical{% endif %}">
+{{ p['urgency'] }}
+</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% else %}
+<p class="empty">No Registered Patients Available</p>
+{% endif %}
+
+</body>
+</html>

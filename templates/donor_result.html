@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Donor Status</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:#fff5f4;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.card{
+background:white;
+padding:40px;
+border-radius:20px;
+width:420px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+h2{
+color:#e53935;
+margin-bottom:20px;
+}
+
+.success{
+color:#2e7d32;
+font-weight:bold;
+font-size:16px;
+}
+
+.fail{
+color:#c62828;
+font-weight:bold;
+font-size:16px;
+}
+
+.info{
+margin-top:10px;
+font-size:15px;
+}
+
+button{
+margin-top:25px;
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#e53935;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#c62828;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+{% if success %}
+
+<h2>Registration Successful</h2>
+<p class="success">You are successfully registered as a donor.</p>
+
+<div class="info">
+<p><strong>Name:</strong> {{ name }}</p>
+<p><strong>Blood Group:</strong> {{ blood }}</p>
+</div>
+
+{% else %}
+
+<h2>Not Eligible</h2>
+<p class="fail">
+You are not eligible to donate now.
+</p>
+
+<p class="info">
+Please wait <strong>{{ wait_days }}</strong> more days.
+</p>
+
+{% endif %}
+
+<a href="/dashboard">
+<button>Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+</html>
