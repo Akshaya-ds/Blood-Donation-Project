@@ -1,141 +1,446 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Donor Network</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BloodBridge AI</title>
 
 <style>
-body{
+
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
 height:100vh;
+background:linear-gradient(135deg,#ff4b5c,#ff6b6b);
 display:flex;
 justify-content:center;
 align-items:center;
-background:#fde0dc;
-font-family:Segoe UI;
+overflow:hidden;
+position:relative;
+top:0 !important;
 }
 
-.card{
-width:400px;
+/* PREMIUM GOOGLE TRANSLATE UI */
+
+#google_translate_element{
+position:fixed;
+top:20px;
+right:20px;
+z-index:9999;
+animation:fadeIn .6s ease;
+}
+
+#google_translate_element select{
+background:linear-gradient(135deg,#ffffff,#f8f8f8);
+color:#222;
+border:none;
+padding:12px 18px;
+border-radius:18px;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+outline:none;
+box-shadow:
+0 8px 20px rgba(0,0,0,0.12),
+0 2px 6px rgba(0,0,0,0.08);
+transition:.35s;
+min-width:170px;
+}
+
+#google_translate_element select:hover{
+transform:translateY(-2px) scale(1.02);
+}
+
+#google_translate_element::before{
+content:"🌐 Language";
+position:absolute;
+top:-24px;
+left:5px;
+font-size:13px;
+font-weight:700;
+color:white;
+background:#e53935;
+padding:5px 12px;
+border-radius:20px;
+}
+
+.goog-logo-link{
+display:none !important;
+}
+
+.goog-te-gadget{
+font-size:0 !important;
+color:transparent !important;
+}
+
+.goog-te-gadget span{
+display:none !important;
+}
+
+/* Background */
+
+.circle{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.08);
+animation:float 8s infinite ease-in-out;
+}
+
+.circle1{
+width:300px;
+height:300px;
+top:-100px;
+left:-100px;
+}
+
+.circle2{
+width:220px;
+height:220px;
+bottom:-70px;
+right:-50px;
+animation-delay:2s;
+}
+
+.circle3{
+width:150px;
+height:150px;
+top:20%;
+right:15%;
+animation-delay:4s;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(20px);}
+100%{transform:translateY(0px);}
+}
+
+/* Main */
+
+.container{
+width:950px;
+height:600px;
 background:white;
-padding:35px;
-border-radius:25px;
-box-shadow:0 15px 40px rgba(0,0,0,.15);
+border-radius:30px;
+overflow:hidden;
+display:flex;
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
+animation:fadeIn 1s ease;
+z-index:1;
 }
 
-h2{
-text-align:center;
-color:#c62828;
-margin-bottom:10px;
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* Left */
+
+.left{
+flex:1;
+background:linear-gradient(135deg,#e53935,#ff6b6b);
+color:white;
+padding:60px 40px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.left h1{
+font-size:52px;
+margin-bottom:20px;
+}
+
+.left p{
+font-size:17px;
+line-height:1.7;
+margin-bottom:35px;
+}
+
+.feature{
+display:flex;
+align-items:center;
+margin-bottom:18px;
+font-size:16px;
+font-weight:500;
+}
+
+.feature span{
+font-size:24px;
+margin-right:12px;
+}
+
+/* Right */
+
+.right{
+flex:1;
+padding:50px 45px;
+overflow-y:auto;
 }
 
 .tabs{
 display:flex;
-justify-content:space-between;
-margin:20px 0;
+margin-bottom:30px;
+background:#f5f5f5;
+border-radius:14px;
+padding:5px;
 }
 
-.tabs button{
-width:48%;
-padding:10px;
-border:none;
-border-radius:15px;
-background:#ffcdd2;
-font-weight:600;
+.tab{
+flex:1;
+padding:12px;
+text-align:center;
+border-radius:10px;
 cursor:pointer;
+font-weight:600;
+transition:.3s;
 }
 
 .active{
-background:#c62828!important;
+background:#e53935;
 color:white;
 }
 
-input,select{
+.form-section{
+display:none;
+}
+
+.active-form{
+display:block;
+}
+
+h2{
+margin-bottom:10px;
+color:#222;
+}
+
+.subtitle{
+font-size:14px;
+color:#777;
+margin-bottom:25px;
+}
+
+.input-group{
+margin-bottom:18px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+font-weight:600;
+}
+
+.input-group input,
+.input-group select{
 width:100%;
-padding:12px;
-margin:8px 0;
-border-radius:10px;
+padding:13px;
+border-radius:12px;
 border:1px solid #ddd;
+background:#fafafa;
+font-size:14px;
 outline:none;
 }
 
-.mainbtn{
+button{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
-border-radius:15px;
-background:#c62828;
+border-radius:14px;
+background:linear-gradient(135deg,#e53935,#ff4b5c);
 color:white;
-font-size:16px;
-margin-top:10px;
+font-size:15px;
+font-weight:600;
 cursor:pointer;
+margin-top:10px;
 }
 
-.hidden{display:none;}
+.error{
+background:#ffebee;
+color:#c62828;
+padding:12px;
+border-radius:10px;
+margin-bottom:18px;
+font-size:14px;
+font-weight:600;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="card">
+<!-- GOOGLE TRANSLATE -->
 
-<h2>Donor – Patient Network</h2>
+<div id="google_translate_element"></div>
+
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="circle circle3"></div>
+
+<div class="container">
+
+<!-- LEFT -->
+
+<div class="left">
+
+<h1>BloodBridge AI</h1>
+
+<p>
+AI-powered blood donor management platform with smart donor matching, GPS tracking and emergency blood request handling.
+</p>
+
+<div class="feature">
+<span>🩸</span>
+AI Smart Donor Ranking
+</div>
+
+<div class="feature">
+<span>📍</span>
+Live GPS Distance Matching
+</div>
+
+<div class="feature">
+<span>💬</span>
+WhatsApp Emergency Connect
+</div>
+
+<div class="feature">
+<span>📊</span>
+Admin Analytics Dashboard
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right">
 
 <div class="tabs">
-<button id="lbtn" class="active" onclick="login()">Login</button>
-<button id="sbtn" onclick="signup()">Signup</button>
+
+<div class="tab active" onclick="showForm('login')">
+Login
 </div>
 
-<!-- LOGIN -->
-<div id="loginbox">
+<div class="tab" onclick="showForm('signup')">
+Signup
+</div>
+
+</div>
 
 {% if error %}
-<p style="color:red;text-align:center">{{ error }}</p>
-{% endif %}
 
-<form action="/login" method="post">
-
-<input type="email" name="email" placeholder="Email" required>
-
-<div style="position:relative">
-<input id="loginpass" type="password" name="password" placeholder="Password" required>
-
-<span onclick="toggleLogin()" style="position:absolute;right:15px;top:14px;cursor:pointer;">👁</span>
+<div class="error">
+{{ error }}
 </div>
 
-<button class="mainbtn" type="submit">Login</button>
+{% endif %}
+
+<!-- LOGIN -->
+
+<div id="login" class="form-section active-form">
+
+<h2>Welcome Back 👋</h2>
+
+<p class="subtitle">
+Login to continue using BloodBridge AI
+</p>
+
+<form action="/login" method="POST">
+
+<div class="input-group">
+<label>Email Address</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="input-group">
+<label>Password</label>
+<input type="password" name="password" required>
+</div>
+
+<button type="submit">
+Login
+</button>
 
 </form>
 
 </div>
 
 <!-- SIGNUP -->
-<div id="signupbox" class="hidden">
 
-<form action="/signup" method="post">
+<div id="signup" class="form-section">
 
-<input name="name" placeholder="Name" required>
-<input type="number" name="age" placeholder="Age" required>
+<h2>Create Account 🚀</h2>
 
+<p class="subtitle">
+Join the AI-powered blood donation network
+</p>
 
-<select name="blood" required>
-<option value="">Blood Group</option>
-<option>A+</option><option>A-</option>
-<option>B+</option><option>B-</option>
-<option>O+</option><option>O-</option>
-<option>AB+</option><option>AB-</option>
-</select>
+<form action="/signup" method="POST">
 
-<input type="email" name="email" placeholder="Email" required>
-
-<div style="position:relative">
-<input id="signpass" type="password" name="password" placeholder="Password" required>
-
-<span onclick="toggleSign()" style="position:absolute;right:15px;top:14px;cursor:pointer;">👁</span>
+<div class="input-group">
+<label>Full Name</label>
+<input type="text" name="name" required>
 </div>
 
-<button class="mainbtn" type="submit">Create Account</button>
+<div class="input-group">
+<label>Age</label>
+<input type="number" name="age" required>
+</div>
+
+<div class="input-group">
+
+<label>Blood Group</label>
+
+<select name="blood" required>
+
+<option value="">Select Blood Group</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>O+</option>
+<option>O-</option>
+<option>AB+</option>
+<option>AB-</option>
+
+</select>
+
+</div>
+
+<div class="input-group">
+<label>Email Address</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="input-group">
+<label>Password</label>
+<input type="password" name="password" required>
+</div>
+
+<button type="submit">
+Create Account
+</button>
 
 </form>
+
+</div>
 
 </div>
 
@@ -143,31 +448,67 @@ cursor:pointer;
 
 <script>
 
-function toggleLogin(){
-let p=document.getElementById("loginpass");
-p.type = p.type==="password" ? "text" : "password";
+function showForm(type){
+
+const login =
+document.getElementById("login");
+
+const signup =
+document.getElementById("signup");
+
+const tabs =
+document.querySelectorAll(".tab");
+
+tabs.forEach(tab=>{
+tab.classList.remove("active");
+});
+
+if(type === "login"){
+
+login.classList.add("active-form");
+signup.classList.remove("active-form");
+
+tabs[0].classList.add("active");
+
 }
 
-function toggleSign(){
-let p=document.getElementById("signpass");
-p.type = p.type==="password" ? "text" : "password";
+else{
+
+signup.classList.add("active-form");
+login.classList.remove("active-form");
+
+tabs[1].classList.add("active");
+
 }
 
-function signup(){
-document.getElementById("signupbox").style.display="block";
-document.getElementById("loginbox").style.display="none";
-sbtn.classList.add("active");
-lbtn.classList.remove("active");
-}
-
-function login(){
-document.getElementById("loginbox").style.display="block";
-document.getElementById("signupbox").style.display="none";
-lbtn.classList.add("active");
-sbtn.classList.remove("active");
 }
 
 </script>
 
+<!-- GOOGLE TRANSLATE -->
+
+<script type="text/javascript">
+
+function googleTranslateElementInit() {
+
+new google.translate.TranslateElement(
+{
+pageLanguage:'en',
+includedLanguages:'en,te,hi,ta,kn',
+layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+},
+'google_translate_element'
+);
+
+}
+
+</script>
+
+<script
+type="text/javascript"
+src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+</script>
+
 </body>
 </html>
+

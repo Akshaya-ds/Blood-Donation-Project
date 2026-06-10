@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Portal</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#eef3f9;
+padding:40px;
+color:#222;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:45px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.header h1{
+font-size:42px;
+font-weight:700;
+color:#0d47a1;
+}
+
+.header p{
+color:#666;
+margin-top:8px;
+font-size:16px;
+}
+
+.back-btn{
+text-decoration:none;
+background:#0d47a1;
+color:white;
+padding:14px 24px;
+border-radius:14px;
+font-weight:600;
+transition:.3s;
+}
+
+.back-btn:hover{
+background:#002171;
+transform:translateY(-3px);
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+margin-bottom:45px;
+}
+
+/* CARD */
+
+.card{
+background:white;
+padding:28px;
+border-radius:22px;
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+position:relative;
+overflow:hidden;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.card::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:6px;
+}
+
+/* COLORS */
+
+.donor::before{
+background:#e53935;
+}
+
+.patient::before{
+background:#8e24aa;
+}
+
+.pending::before{
+background:#fb8c00;
+}
+
+.accepted::before{
+background:#43a047;
+}
+
+.rejected::before{
+background:#d32f2f;
+}
+
+.ai::before{
+background:#1565c0;
+}
+
+/* CONTENT */
+
+.icon{
+font-size:36px;
+margin-bottom:16px;
+}
+
+.label{
+font-size:17px;
+color:#666;
+margin-bottom:8px;
+}
+
+.number{
+font-size:46px;
+font-weight:700;
+}
+
+/* CHART SECTION */
+
+.chart-container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-top:20px;
+align-items:start;
+}
+
+.chart-card{
+background:white;
+padding:22px;
+border-radius:22px;
+box-shadow:0 8px 22px rgba(0,0,0,.08);
+height:380px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.chart-card h2{
+margin-bottom:18px;
+color:#0d47a1;
+font-size:24px;
+text-align:center;
+font-weight:700;
+}
+
+.chart-card canvas{
+max-height:260px !important;
+}
+
+/* FOOTER */
+
+.footer{
+margin-top:60px;
+text-align:center;
+color:#777;
+font-size:14px;
+}
+
+@media(max-width:900px){
+
+.chart-container{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+<div>
+
+<h1>Admin Analytics Portal</h1>
+
+<p>
+Real-time monitoring of donors, patients and emergency requests
+</p>
+
+</div>
+
+<a href="/dashboard" class="back-btn">
+← Back to Dashboard
+</a>
+
+</div>
+
+<!-- STATS -->
+
+<div class="grid">
+
+<!-- DONORS -->
+
+<div class="card donor">
+
+<div class="icon">❤️</div>
+
+<div class="label">
+Total Donors
+</div>
+
+<div class="number">
+{{ total_donors }}
+</div>
+
+</div>
+
+<!-- PATIENTS -->
+
+<div class="card patient">
+
+<div class="icon">🏥</div>
+
+<div class="label">
+Total Patients
+</div>
+
+<div class="number">
+{{ total_patients }}
+</div>
+
+</div>
+
+<!-- PENDING -->
+
+<div class="card pending">
+
+<div class="icon">🩸</div>
+
+<div class="label">
+Pending Requests
+</div>
+
+<div class="number">
+{{ pending_requests }}
+</div>
+
+</div>
+
+<!-- ACCEPTED -->
+
+<div class="card accepted">
+
+<div class="icon">✅</div>
+
+<div class="label">
+Accepted Requests
+</div>
+
+<div class="number">
+{{ accepted_requests }}
+</div>
+
+</div>
+
+<!-- REJECTED -->
+
+<div class="card rejected">
+
+<div class="icon">❌</div>
+
+<div class="label">
+Rejected Requests
+</div>
+
+<div class="number">
+{{ rejected_requests }}
+</div>
+
+</div>
+
+<!-- AI -->
+
+<div class="card ai">
+
+<div class="icon">🤖</div>
+
+<div class="label">
+Most Requested Blood Group
+</div>
+
+<div class="number">
+{{ most_requested }}
+</div>
+
+</div>
+
+</div>
+
+<!-- CHARTS -->
+
+<div class="chart-container">
+
+<!-- REQUEST CHART -->
+
+<div class="chart-card">
+
+<h2>Request Analytics</h2>
+
+<canvas id="requestChart"></canvas>
+
+</div>
+
+<!-- BLOOD CHART -->
+
+<div class="chart-card">
+
+<h2>Blood Group Demand</h2>
+
+<canvas id="bloodChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+Blood Donor Management System © 2025
+</div>
+
+<!-- CHART JS -->
+
+<script>
+
+const requestChart = new Chart(
+document.getElementById('requestChart'),
+{
+type:'doughnut',
+
+data:{
+labels:[
+'Pending',
+'Accepted',
+'Rejected'
+],
+
+datasets:[{
+
+data:[
+{{ pending_requests }},
+{{ accepted_requests }},
+{{ rejected_requests }}
+],
+
+backgroundColor:[
+'#fb8c00',
+'#43a047',
+'#d32f2f'
+],
+
+borderWidth:2
+
+}]
+},
+
+options:{
+responsive:true,
+
+plugins:{
+legend:{
+position:'bottom'
+}
+}
+}
+}
+);
+
+const bloodChart = new Chart(
+document.getElementById('bloodChart'),
+{
+type:'bar',
+
+data:{
+labels:[
+'A+',
+'B+',
+'O+',
+'AB+',
+'O-'
+],
+
+datasets:[{
+
+label:'Blood Requests',
+
+data:[
+{{ a_positive }},
+{{ b_positive }},
+{{ o_positive }},
+{{ ab_positive }},
+{{ o_negative }}
+],
+
+backgroundColor:[
+'#e53935',
+'#8e24aa',
+'#1e88e5',
+'#43a047',
+'#fb8c00'
+],
+
+borderRadius:10
+
+}]
+},
+
+options:{
+responsive:true,
+
+plugins:{
+legend:{
+display:false
+}
+},
+
+scales:{
+y:{
+beginAtZero:true
+}
+}
+}
+}
+);
+
+</script>
+
+</body>
+</html>

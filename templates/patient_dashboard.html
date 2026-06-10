@@ -4,14 +4,16 @@
 <title>Patient Registration</title>
 
 <style>
+
 body{
     margin:0;
-    font-family:'Segoe UI', sans-serif;
+    font-family:'Segoe UI',sans-serif;
     background:#f4f6f9;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
+    padding:30px 0;
 }
 
 .card{
@@ -52,6 +54,7 @@ input, select{
     background:#f9fafb;
     outline:none;
     transition:0.3s;
+    box-sizing:border-box;
 }
 
 input:focus, select:focus{
@@ -60,7 +63,16 @@ input:focus, select:focus{
     box-shadow:0 0 5px rgba(229,57,53,0.2);
 }
 
-/* Urgency Indicator */
+.location-status{
+    margin-top:20px;
+    background:#e3f2fd;
+    color:#1565c0;
+    padding:14px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+}
+
 .urgency-indicator{
     margin-top:8px;
     font-size:13px;
@@ -105,12 +117,13 @@ button:hover{
 
 .view-btn{
     margin-top:10px;
-    background:#444;
+    background:#1e293b;
 }
 
 .view-btn:hover{
-    background:#222;
+    background:#0f172a;
 }
+
 </style>
 </head>
 
@@ -119,69 +132,155 @@ button:hover{
 <div class="card">
 
 <h1>🩸 Patient Registration</h1>
-<p class="subtitle">Submit a blood request and find donors quickly.</p>
+
+<p class="subtitle">
+Submit a blood request and find nearby donors quickly.
+</p>
 
 <form action="/register_patient" method="POST">
 
 <label>👤 Full Name *</label>
-<input type="text" name="name" placeholder="Enter full name" required>
+<input type="text" name="name" required>
 
 <label>🎂 Age *</label>
-<input type="number" name="age" placeholder="Enter age" required>
+<input type="number" name="age" required>
 
 <label>🧬 Blood Group *</label>
+
 <select name="blood" required>
-<option value="">Select blood group</option>
-<option>A+</option><option>A-</option>
-<option>B+</option><option>B-</option>
-<option>O+</option><option>O-</option>
-<option>AB+</option><option>AB-</option>
+
+<option value="">Select Blood Group</option>
+
+<option>A+</option>
+<option>A-</option>
+
+<option>B+</option>
+<option>B-</option>
+
+<option>O+</option>
+<option>O-</option>
+
+<option>AB+</option>
+<option>AB-</option>
+
 </select>
 
 <label>📞 Phone Number *</label>
-<input type="text" name="phone" placeholder="Enter phone number" required>
+<input type="text" name="phone" required>
 
-<label>📍 Location *</label>
-<input type="text" name="location" placeholder="Enter location" required>
+<label>📍 Location / Area *</label>
+<input type="text" name="location" placeholder="Ex: Vijayawada, Guntur..." required>
 
 <label>🧪 Units Required *</label>
-<input type="number" name="units" placeholder="Enter units required" required>
+<input type="number" name="units" required>
+
+<input type="hidden" id="latitude" name="latitude">
+<input type="hidden" id="longitude" name="longitude">
 
 <label>⚠ Urgency Level *</label>
+
 <select name="urgency" id="urgency" required onchange="showUrgency(this.value)">
+
 <option value="">Select urgency level</option>
+
 <option value="Normal">Normal</option>
 <option value="Urgent">Urgent</option>
 <option value="Critical">Critical</option>
+
 </select>
 
 <div id="urgencyBox"></div>
 
-<button type="submit">🚑 Submit Request</button>
+<div class="location-status" id="locationStatus">
+📍 Fetching your live GPS location...
+</div>
+
+<button type="submit">
+🚑 Submit Request
+</button>
 
 </form>
 
 <a href="/patients_list">
-<button class="view-btn">📋 View Registered Patients</button>
+<button class="view-btn">
+📋 View Registered Patients
+</button>
 </a>
 
 </div>
 
 <script>
+
 function showUrgency(value){
+
     const box = document.getElementById("urgencyBox");
+
     box.innerHTML = "";
 
     if(value === "Normal"){
-        box.innerHTML = '<div class="urgency-indicator normal">🟢 Normal Priority</div>';
+
+        box.innerHTML =
+        '<div class="urgency-indicator normal">🟢 Normal Priority</div>';
+
     }
+
     else if(value === "Urgent"){
-        box.innerHTML = '<div class="urgency-indicator urgent">🟠 Urgent Priority</div>';
+
+        box.innerHTML =
+        '<div class="urgency-indicator urgent">🟠 Urgent Priority</div>';
+
     }
+
     else if(value === "Critical"){
-        box.innerHTML = '<div class="urgency-indicator critical">🔴 Critical Priority</div>';
+
+        box.innerHTML =
+        '<div class="urgency-indicator critical">🔴 Critical Priority</div>';
+
     }
+
 }
+
+window.onload = function(){
+
+    const status = document.getElementById("locationStatus");
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position){
+
+                document.getElementById("latitude").value =
+                position.coords.latitude;
+
+                document.getElementById("longitude").value =
+                position.coords.longitude;
+
+                status.innerHTML =
+                "✅ Live GPS location captured successfully";
+
+            },
+
+            function(error){
+
+                status.innerHTML =
+                "⚠ Location access denied. Distance matching may not work properly.";
+
+            }
+
+        );
+
+    }
+
+    else{
+
+        status.innerHTML =
+        "❌ GPS not supported in this browser.";
+
+    }
+
+}
+
 </script>
 
 </body>

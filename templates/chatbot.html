@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>BloodBridge AI Chatbot</title>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:transparent;
+}
+
+/* FLOAT BUTTON */
+
+.chat-toggle{
+
+position:fixed;
+bottom:25px;
+right:25px;
+
+width:70px;
+height:70px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#ff4b5c,#ff1e3c);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:32px;
+color:white;
+
+cursor:pointer;
+
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+z-index:9999;
+
+transition:.3s;
+}
+
+.chat-toggle:hover{
+transform:scale(1.08);
+}
+
+/* CHATBOX */
+
+.chat-container{
+
+position:fixed;
+
+bottom:110px;
+right:25px;
+
+width:360px;
+height:520px;
+
+background:white;
+
+border-radius:25px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.2);
+
+display:none;
+
+flex-direction:column;
+
+overflow:hidden;
+
+z-index:9999;
+
+animation:popup .4s ease;
+}
+
+@keyframes popup{
+
+from{
+transform:translateY(20px);
+opacity:0;
+}
+
+to{
+transform:translateY(0);
+opacity:1;
+}
+
+}
+
+/* HEADER */
+
+.chat-header{
+
+background:linear-gradient(135deg,#e53935,#ff4b5c);
+
+color:white;
+
+padding:18px;
+
+font-size:20px;
+font-weight:bold;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.close-btn{
+cursor:pointer;
+font-size:24px;
+}
+
+/* CHAT BODY */
+
+.chat-body{
+
+flex:1;
+
+padding:15px;
+
+overflow-y:auto;
+
+background:#fff5f5;
+}
+
+/* MESSAGES */
+
+.message{
+
+max-width:80%;
+
+padding:12px 15px;
+
+margin-bottom:12px;
+
+border-radius:18px;
+
+font-size:14px;
+
+line-height:1.5;
+
+animation:fade .3s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.user{
+background:#ff4b5c;
+color:white;
+margin-left:auto;
+border-bottom-right-radius:5px;
+}
+
+.bot{
+background:white;
+color:#333;
+border-bottom-left-radius:5px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+/* INPUT */
+
+.chat-input{
+
+display:flex;
+
+padding:15px;
+
+background:white;
+
+border-top:1px solid #eee;
+}
+
+.chat-input input{
+
+flex:1;
+
+padding:12px;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+outline:none;
+
+font-size:14px;
+}
+
+.chat-input button{
+
+margin-left:10px;
+
+padding:12px 16px;
+
+border:none;
+
+border-radius:12px;
+
+background:#e53935;
+
+color:white;
+
+cursor:pointer;
+
+font-weight:bold;
+
+transition:.3s;
+}
+
+.chat-input button:hover{
+background:#c62828;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- FLOATING BUTTON -->
+
+<div class="chat-toggle" onclick="openChat()">
+💬
+</div>
+
+<!-- CHATBOX -->
+
+<div class="chat-container" id="chatbox">
+
+<div class="chat-header">
+
+BloodBridge AI
+
+<span class="close-btn"
+onclick="closeChat()">
+×
+</span>
+
+</div>
+
+<div class="chat-body" id="chatBody">
+
+<div class="message bot">
+Hello 👋<br><br>
+I am BloodBridge AI Assistant.<br>
+How can I help you today?
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+type="text"
+id="userInput"
+placeholder="Type your message..."
+>
+
+<button onclick="sendMessage()">
+Send
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function openChat(){
+
+document
+.getElementById("chatbox")
+.style.display="flex";
+
+}
+
+function closeChat(){
+
+document
+.getElementById("chatbox")
+.style.display="none";
+
+}
+
+async function sendMessage(){
+
+let input =
+document.getElementById("userInput");
+
+let message =
+input.value.trim();
+
+if(message === "") return;
+
+let chatBody =
+document.getElementById("chatBody");
+
+/* USER MESSAGE */
+
+chatBody.innerHTML += `
+
+<div class="message user">
+${message}
+</div>
+
+`;
+
+/* CLEAR INPUT */
+
+input.value = "";
+
+/* AUTO SCROLL */
+
+chatBody.scrollTop =
+chatBody.scrollHeight;
+
+/* SEND TO FLASK */
+
+let response =
+await fetch("/chatbot",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:message
+})
+
+});
+
+let data =
+await response.json();
+
+/* BOT MESSAGE */
+
+chatBody.innerHTML += `
+
+<div class="message bot">
+${data.reply}
+</div>
+
+`;
+
+chatBody.scrollTop =
+chatBody.scrollHeight;
+
+}
+
+</script>
+
+</body>
+</html>

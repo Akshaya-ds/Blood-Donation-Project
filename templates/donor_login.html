@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Donor Verification</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ffebee,#fce4ec);
+}
+
+.container{
+width:400px;
+background:white;
+padding:40px;
+border-radius:25px;
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+text-align:center;
+animation:fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.logo{
+font-size:55px;
+margin-bottom:10px;
+}
+
+h1{
+color:#e53935;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#666;
+font-size:15px;
+margin-bottom:30px;
+}
+
+.input-box{
+margin-bottom:20px;
+text-align:left;
+}
+
+.input-box label{
+display:block;
+margin-bottom:8px;
+font-weight:600;
+color:#444;
+}
+
+.input-box input{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+font-size:15px;
+transition:.3s;
+}
+
+.input-box input:focus{
+border-color:#e53935;
+outline:none;
+box-shadow:0 0 8px rgba(229,57,53,.3);
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#e53935,#d81b60);
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
+
+.footer{
+margin-top:20px;
+font-size:13px;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+🩸
+</div>
+
+<h1>Donor Verification</h1>
+
+<p class="subtitle">
+Verify your details to view your incoming blood requests
+</p>
+
+<form action="/verify_donor" method="POST">
+
+<div class="input-box">
+
+<label>Donor Name</label>
+
+<input type="text"
+name="name"
+placeholder="Enter your name"
+required>
+
+</div>
+
+<div class="input-box">
+
+<label>Phone Number</label>
+
+<input type="text"
+name="phone"
+placeholder="Enter your phone number"
+required>
+
+</div>
+
+<button type="submit">
+View My Requests
+</button>
+
+</form>
+
+<div class="footer">
+Blood Donor Management System
+</div>
+
+</div>
+
+</body>
+</html>
